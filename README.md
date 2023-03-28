@@ -8,6 +8,6 @@ DON'T clone or fork this repo, unless you want to see how it works first. Code a
 
 ## Front-End Technologies
     
-    A React App- Can be set up using [![Create React App] https://create-react-app.dev/] or [![Vite]https://vitejs.dev/]
+A React App- Can be set up using [Create React App](https://create-react-app.dev/) or [Vite](https://vitejs.dev/)
 
 ## Back-End Technologies
