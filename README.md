@@ -28,4 +28,14 @@ DON'T clone or fork this repo, unless you want to see how it works first. Code a
 
 When used in a form, multer attaches a body object, which contains the values of the inputs from the form, and a file or files object, which contains the uploaded files, to the request object that a server route receives. 
 
-Most multer tutorials will tell you that your HTML form simply needs to be specified as `enctype=multipart/form-data`. However, with a combo of React-Redux-Saga, you need to use FormData() to ensure that the data being captured has the correct key:value pairs before being sent on to the server. 
+Most multer tutorials will tell you that your HTML form simply needs to be specified as `enctype=multipart/form-data`. However, with a combo of React-Redux-Saga, you need to use FormData() when assigning the file anf form inputs to a piece of state to ensure that the data being captured has the correct key:value pairs before being sent on to the server. 
+
+## Single Upload Form
+
+For a simple, single file upload, you can do what most tutorials suggest and use the HTML form and input tags to create a file upload field: 
+
+```html
+    <form encType='multipart/form-data'>
+        <input type='file'></input>
+    </form>
+```

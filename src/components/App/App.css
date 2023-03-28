@@ -1,0 +1,12 @@
+body {
+  text-align: center;
+  background-color: #8EC5FC;
+}
+
+.uploadForms {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+
