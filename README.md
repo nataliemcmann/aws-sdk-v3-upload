@@ -28,11 +28,11 @@ DON'T clone or fork this repo, unless you want to see how it works first. Code a
 
 When used in a form, multer attaches a body object, which contains the values of the inputs from the form, and a file or files object, which contains the uploaded files, to the request object that a server route receives. 
 
-Most multer tutorials will tell you that your HTML form simply needs to be specified as `enctype=multipart/form-data`. However, with a combo of React-Redux-Saga, you need to use FormData() when assigning the file anf form inputs to a piece of state to ensure that the data being captured has the correct key:value pairs before being sent on to the server. 
+Most multer tutorials will tell you that your HTML form simply needs to be specified as `enctype=multipart/form-data`. However, with a combo of React-Redux-Saga, you need to use FormData() when assigning the file and form inputs to a piece of state to ensure that the data being captured has the correct key:value pairs before being sent on to the server. 
 
 ## Single Upload Form
 
-For a simple, single file upload, you can do what most tutorials suggest and use the HTML form and input tags to create a file upload field: 
+For a simple, single file upload, you can do what many multer tutorials suggest and use the HTML form and input tags to create a file upload field: 
 
 ```html
     <form encType='multipart/form-data'>
@@ -40,4 +40,22 @@ For a simple, single file upload, you can do what most tutorials suggest and use
     </form>
 ```
 
-*add screenshot
+To save the file as a piece of state, import the useState hook and instantiate some new file state: 
+
+```js
+const [newFile, setFile] = useState('')
+```
+
+For the input, set up an onChange callback function to take the new file and set it to our newFile state variable. Files are a strange data type (if you run typeof File in the browser console, it will say that its a function) and to access them you need to access event.target.files[0]. 
+
+```jsx
+<form onSubmit={addNewFile} encType='multipart/form-data'>
+    <input 
+        type='file' 
+        onChange={(event)=> setFile(event.target.files[0])}
+    >
+    </input>
+    <button type="submit">Submit</button>
+</form>
+```
+
