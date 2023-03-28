@@ -21,3 +21,11 @@ DON'T clone or fork this repo, unless you want to see how it works first. Code a
 - [pg](https://node-postgres.com/) 
 - [PostgreSQL](https://www.postgresql.org/) 
 - *Optional [Postico](https://eggerapps.at/postico2/) as a PostgreSQL interface.   
+
+# Building the form
+
+[Multer](https://github.com/expressjs/multer) is a middleware that handles `multipart/form-data`. It is most popularly searched for in regards to photo and video file uploads, but could be used for any file type.
+
+When used in a form, multer attaches a body object, which contains the values of the inputs from the form, and a file or files object, which contains the uploaded files, to the request object that a server route receives. 
+
+Most multer tutorials will tell you that your HTML form simply needs to be specified as `enctype=multipart/form-data`. However, with a combo of React-Redux-Saga, you need to use FormData() to ensure that the data being captured has the correct key:value pairs before being sent on to the server. 
