@@ -4,7 +4,7 @@ As a junior dev, figuring out how to upload photos to secure cloud storage like 
 
 # Set Up
 
-DON'T clone or fork this repo, unless you want to see how it works first. Code along on starter repo that has the following set up:
+DON'T clone down this repo (unless you want to see how it works). Use it as a reference and/or code along on a starter repo that has the following set up:
 
 ## Front-End Technologies
     
@@ -24,11 +24,9 @@ DON'T clone or fork this repo, unless you want to see how it works first. Code a
 
 # Building the form
 
-[Multer](https://github.com/expressjs/multer) is a middleware that handles `multipart/form-data`. It is most popularly searched for in regards to photo and video file uploads, but could be used for any file type.
+[Multer](https://github.com/expressjs/multer) is a Node.js middleware that handles `multipart/form-data`. It is most popularly searched for in regards to photo and video file uploads, but could be used for any file type.
 
-When used in a form, multer attaches a body object, which contains the values of the inputs from the form, and a file or files object, which contains the uploaded files, to the request object that a server route receives. 
-
-Most multer tutorials will tell you that your HTML form simply needs to be specified as `enctype=multipart/form-data`. However, with a combo of React-Redux-Saga, you need to use FormData() when assigning the file and form inputs to a piece of state to ensure that the data being captured has the correct key:value pairs before being sent on to the server. 
+Multer attaches a body object, which contains the values of the inputs from a form, and a file or files object, which contains the uploaded files, to the request object that a server route receives. Consequently, when creating forms with a file upload option, you must include `encType=multipart/form-data` in your form tag and you must specify that your input is `type='file'`. 
 
 ## Single Upload Form
 
@@ -46,7 +44,7 @@ To save the file as a piece of state, import the useState hook and instantiate s
 const [newFile, setFile] = useState('')
 ```
 
-For the input, set up an onChange callback function to take the new file and set it to our newFile state variable. Files are a strange data type (if you run typeof File in the browser console, it will say that its a function) and to access them you need to access event.target.files[0]. 
+For the input, set up an onChange callback function to take the new file and set it to our newFile state variable. Files are a strange data type (if you run typeof File in the browser console, it will say that its a function, but if you console.log it, it looks like an object) and to access the singular uploaded file, you must call on event.target.files[0] as though it is an array.  
 
 ```jsx
 <form onSubmit={addNewFile} encType='multipart/form-data'>
@@ -59,3 +57,9 @@ For the input, set up an onChange callback function to take the new file and set
 </form>
 ```
 
+## Multiple Upload Form
+
+
+# Sending file data with Saga
+
+Simply specifying the form and input type may be sufficient with a jQuery or vanilla Javascript front-end. However, with a combo of React-Redux-Saga, you need to use FormData() when sending the file and form data to the server to ensure that that data has the correct key:value pairs before being sent on to the server.
