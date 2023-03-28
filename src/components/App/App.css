@@ -1,0 +1,16 @@
+body {
+  background-color: #8EC5FC;
+}
+
+h1 {
+  text-align: center;
+  margin: 2%;
+}
+
+.uploadForms {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+

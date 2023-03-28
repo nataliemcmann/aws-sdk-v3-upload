@@ -1,0 +1,13 @@
+.sufHTML {
+    width: 20%;
+}
+
+label {
+    margin: 1%;
+    text-align: left;
+    font-weight: bold;
+}
+
+form{
+    margin: 1%;
+}
