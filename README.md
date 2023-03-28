@@ -4,22 +4,20 @@ As a junior dev, figuring out how to upload photos to secure cloud storage like 
 
 # Set Up
 
-DON'T clone or fork this repo, unless you want to see how it works first. Code along on starter repo that has a the following set up:
+DON'T clone or fork this repo, unless you want to see how it works first. Code along on starter repo that has the following set up:
 
 ## Front-End Technologies
     
-A React App: can be set up using [Create React App](https://create-react-app.dev/) or [Vite](https://vitejs.dev/)
+- A React App: can be set up using [Create React App](https://create-react-app.dev/) or [Vite](https://vitejs.dev/)
 
-[React Redux](https://react-redux.js.org/): 
+- [React Redux](https://react-redux.js.org/)
 
-If you forget to install it with your React App, run `npm install react-redux` in the terminal. 
-
-[Redux-Saga](https://redux-saga.js.org/):
-
-Run `npm install redux-saga` in the terminal.
+- [Redux-Saga](https://redux-saga.js.org/)
 
 ## Back-End Technologies
 
-A [Node.js](https://nodejs.org/en) environment with [Express.js](https://expressjs.com/) (run `npm install express`) and  [pg](https://node-postgres.com/) installed (run `npm install pg`). 
-
-A [PostgreSQL](https://www.postgresql.org/) database, ideally with [Postico](https://eggerapps.at/postico2/) installed as a database interface.   
+- [Node.js](https://nodejs.org/en)
+- [Express.js](https://expressjs.com/) 
+- [pg](https://node-postgres.com/) 
+- [PostgreSQL](https://www.postgresql.org/) 
+- *Optional [Postico](https://eggerapps.at/postico2/) as a PostgreSQL interface.   
