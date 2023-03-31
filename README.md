@@ -93,15 +93,15 @@ For multiple files, you must loop through the file array and append each one to 
 In the post request, include the following header: 
 
 ```js
-    yield axios({
-                method: 'POST',
-                url: '/api/image/single',
-                data: data,
-                //include header to inform server of data type
-                headers: {
-                    'content-type': 'multipart/form-data'
-                }
-                });
+yield axios({
+            method: 'POST',
+            url: '/api/image/single',
+            data: data,
+            //include header to inform server of data type
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+            });
 ```
 
 # Receiving file data in the server
