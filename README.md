@@ -146,3 +146,12 @@ And plug it into your post route, specifying how many files and the fieldname of
 router.post('/single', upload.single('file'), (req, res)
 ```
 
+## AWS S3
+
+Amazon Simple Storage Service (s3) lets you store files in "buckets" hosted by Amazon Web Services. This type of cloud storage is easier and more secure than building a bunch of your own servers to host a file database. 
+
+To use AWS S3, you need to create an account and set up a bucket. Since this repo is for code, I won't get into how to do bucket set or permissions, but here is the link to their documentation: https://docs.aws.amazon.com/AmazonS3/latest/userguide/GetStartedWithS3.html
+
+The code part is aws-sdk, which allows your server to access your S3. While there are several detailed aws-sdk version 2 tutorials, version 3 came out in 2020 and hasn't seen the same love as far as I can tell. AWS has decent [documentation](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/index.html#aws-sdk-for-javascript-v3) and [code examples](https://docs.aws.amazon.com/AmazonS3/latest/userguide/service_code_examples.html), but they are a bit confusing. 
+
+In this repo, I have the version 2 code commented out beneath the version 3 upload for comparison.
