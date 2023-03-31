@@ -4,7 +4,7 @@ As a junior dev, figuring out how to upload photos to secure cloud storage like 
 
 # Set Up
 
-DON'T clone down this repo (unless you want to see how it works). Use it as a reference and/or code along on a starter repo that has the following set up:
+Use this repo as a reference and/or code along on a starter repo that has the following set up:
 
 ## Front-End Technologies
     
@@ -60,8 +60,46 @@ For the input, set up an onChange callback function to take the new file and set
 ## Multiple Upload Form
 
 
-# Sending file data with Saga
+# Sending file data
 
-Simply specifying the form and input type may be sufficient with a jQuery or vanilla Javascript front-end. However, with a combo of React-Redux-Saga, you need to use FormData() when sending the file and form data to the server to ensure that that data has the correct key:value pairs before being sent on to the server.
+Simply specifying the form and input type may be sufficient with a jQuery or vanilla Javascript front-end. However, with React or a combot of React-Redux-Saga, you need to use FormData() when sending the file and form data to the server to ensure that that data has the correct key:value pairs before being sent on to the server. In these code examples, the formdata creation occurs in the saga function, but it could be done in the React component instead. 
 
-In the saga:
+Single file FormData() declaration:
+
+```js
+    //receive file
+    const newFile = action.payload.file;
+    //turn file into formdata by creating
+    //new FormData
+    const data = new FormData();
+    //and appending the file to that FormData
+    data.append("file", newFile);
+```
+
+For multiple files, you must loop through the file array and append each one to the data: 
+
+```js
+    //receive array of files
+    const newFiles = action.payload;
+    //get array length
+    const filesLength = newFiles.files.length;
+    const data = new FormData(); //declare FormData
+    //loop to populate FormData with file data
+    for (let i = 0; i < filesLength; i++) {
+        data.append("file", newFiles.files[i]);
+    }
+```
+
+In the post request, include the following header: 
+
+```js
+    yield axios({
+                method: 'POST',
+                url: '/api/upload',
+                data: data,
+                //include header to inform server of data type
+                headers: {
+                    'content-type': 'multipart/form-data'
+                }
+                });
+```

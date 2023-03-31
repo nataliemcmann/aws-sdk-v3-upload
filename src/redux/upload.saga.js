@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { put, take, takeEvery } from 'redux-saga/effects';
+import { put, takeEvery } from 'redux-saga/effects';
 
 //will fire on "ADD_SINGLE_FILE" dispatch
 function* addSingleFile(action) {
@@ -13,6 +13,17 @@ function* addSingleFile(action) {
         data.append("file", newFile);
         //check the data object is as you expect
         yield console.log('Post new file to upload', data);
+        //axios request
+        yield axios({
+            method: 'POST',
+            url: '/api/upload',
+            data: data,
+            //include header to inform server of data type
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+            });
+        yield put({type: 'SET_UPLOADS', payload: response.data})
     } catch(error) {
         console.log('Error in addSingleFile', error)
     }
