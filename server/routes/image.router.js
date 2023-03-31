@@ -2,6 +2,9 @@
 const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router(); 
+//import s3
+const { s3upload } = require('../s3service');
+require('dotenv').config(); //need this to get the bucket and keys
 //import multer
 const multer = require('multer');
 //configure multer to use computer memory for temp storage
@@ -19,9 +22,10 @@ const fileFilter = (req, file, cb) =>{
 const upload = multer({storage, fileFilter});
 
 //post singe file route
-router.post('/single', upload.single('file'), (req, res) => {
+router.post('/single', upload.single('file'), async (req, res) => {
     try{
-        console.log('file received', req.file);
+        const result = await s3upload(req.file)
+        console.log('file location received', result.Location);
         res.sendStatus(201);
     } catch(error) {
         console.log('AWS S3 upload fail');

@@ -2,7 +2,7 @@
 
 //commands and services are modularized, so import both the 
 //desired bucket action and the S3 client
-import { PutObjectCommand, S3 } from "@aws-sdk/client-s3";
+const { PutObject, S3 } = require("@aws-sdk/client-s3");
 //unique identifier library
 const uuid = require('uuid').v4
 
@@ -12,8 +12,8 @@ const client = new S3({});
 //create and export s3upload, which is an asynchronous function
 //that will execute the PutObjectCommand 
 //when called upon
-export const s3upload = async (file) => {
-const command = new PutObjectCommand({
+exports.s3upload = async (file) => {
+const command = new PutObject({
     //declare the bucket to put file in
     Bucket: process.env.AWS_BUCKET_NAME,
     //specify what to call the file (random unique identifier + file name)
@@ -23,7 +23,7 @@ const command = new PutObjectCommand({
     });
 
     try {
-    const response = await client.send(command).promise();
+    const response = await client.send(command);
     console.log('aws upload success', response);
     return response;
     } catch (err) {
