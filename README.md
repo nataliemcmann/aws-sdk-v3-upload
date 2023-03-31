@@ -1,6 +1,6 @@
 # AWS-SDK V3 PERN Stack Photo Upload Tutorial
 
-As a junior dev, figuring out how to upload photos to secure cloud storage like Cloudinary or AWS S3 is a typical goal. For myself, scouring the internet for upload tutorials that used my specific stack was a valuable experience but it was difficult. I'm also not entirely sure how I managed to do it. So, for my future self and for any developer who has neither the time nor the patience to cobble together an image upload path for themselves, I'm putting together a step-by-step tutorial of how to upload files to a React front-end that uses Redux to manage state, Saga to make http requests, and a Node.js/Express.js backend that implements multer and version 3 of aws-sdk for Javascript to handle the data transfer to an AWS S3 Bucket.
+As a junior dev, figuring out how to upload photos to secure cloud storage like Cloudinary or AWS S3 is a typical goal. For myself, scouring the internet for upload tutorials that used my specific stack was a valuable experience but it was difficult. I'm also not entirely sure how I managed to do it. So, for my future self and for any developer who has neither the time nor the patience to cobble together an image upload path for themselves, I'm putting together a collection of code samples showing how to upload files to a React front-end that uses Redux to manage state, Saga to make http requests, and a Node.js/Express.js backend that implements multer and version 3 of aws-sdk for Javascript to handle the data transfer to an AWS S3 Bucket.
 
 # Set Up
 
@@ -30,7 +30,7 @@ Multer attaches a body object, which contains the values of the inputs from a fo
 
 ## Single Upload Form
 
-For a simple, single file upload, you can do what many multer tutorials suggest and use the HTML form and input tags to create a file upload field: 
+For a simple, single file upload, use the HTML form and input tags to create a file upload field: 
 
 ```html
     <form encType='multipart/form-data'>
@@ -63,3 +63,5 @@ For the input, set up an onChange callback function to take the new file and set
 # Sending file data with Saga
 
 Simply specifying the form and input type may be sufficient with a jQuery or vanilla Javascript front-end. However, with a combo of React-Redux-Saga, you need to use FormData() when sending the file and form data to the server to ensure that that data has the correct key:value pairs before being sent on to the server.
+
+In the saga:
