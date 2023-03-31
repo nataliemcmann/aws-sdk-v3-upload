@@ -50,5 +50,5 @@ const command = new PutObjectCommand({
 //             Body: file.buffer
 //         };
         //give param to client to upload and return result
-//     return await s3.upload(param).promise()));
+//     return await s3.upload(param).promise();
 // }
