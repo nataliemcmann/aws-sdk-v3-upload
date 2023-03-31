@@ -19,7 +19,7 @@ const fileFilter = (req, file, cb) =>{
 const upload = multer({storage, fileFilter});
 
 //post singe file route
-router.post('/single', upload.single(), (req, res) => {
+router.post('/single', upload.single('file'), (req, res) => {
     try{
         console.log('file received', req.file);
         res.sendStatus(201);
