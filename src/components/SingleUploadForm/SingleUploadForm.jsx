@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 //css import
 import './SingleUploadForm.css';
 
@@ -6,11 +7,19 @@ function SingleUploadForm() {
     //declare state variable and setter function with useState hook
     const [newFile, setFile] = useState('');
 
+    //declare dispatch
+    const dispatch = useDispatch();
+
     //onSubmit, run this function to set the file input value to
     //the state variable
     function addNewFile (event) {
         event.preventDefault(); //prevent continous page refresh
         console.log(newFile); //test to ensure the file is captured
+        //call saga for file upload
+        dispatch({
+            type: 'ADD_SINGLE_FILE',
+            payload: newFile
+        })
     }
 
     return(

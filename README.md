@@ -1,10 +1,10 @@
 # AWS-SDK V3 PERN Stack Photo Upload Tutorial
 
-As a junior dev, figuring out how to upload photos to secure cloud storage like Cloudinary or AWS S3 is a typical goal. For myself, scouring the internet for upload tutorials that used my specific stack was a valuable experience but it was difficult. I'm also not entirely sure how I managed to do it. So, for my future self and for any developer who has neither the time nor the patience to cobble together an image upload path for themselves, I'm putting together a step-by-step tutorial of how to upload files to a React front-end that uses Redux to manage state, Saga to make http requests, and a Node.js/Express.js backend that implements multer and version 3 of aws-sdk for Javascript to handle the data transfer to an AWS S3 Bucket.
+As a junior dev, figuring out how to upload photos to secure cloud storage like Cloudinary or AWS S3 is a typical goal. For myself, scouring the internet for upload tutorials that used my specific stack was a valuable experience but it was difficult. I'm also not entirely sure how I managed to do it. So, for my future self and for any developer who has neither the time nor the patience to cobble together an image upload path for themselves, I'm putting together a collection of code samples showing how to upload files to a React front-end that uses Redux to manage state, Saga to make http requests, and a Node.js/Express.js backend that implements multer and version 3 of aws-sdk for Javascript to handle the data transfer to an AWS S3 Bucket.
 
 # Set Up
 
-DON'T clone or fork this repo, unless you want to see how it works first. Code along on starter repo that has the following set up:
+Use this repo as a reference and/or code along on a starter repo that has the following set up:
 
 ## Front-End Technologies
     
@@ -24,15 +24,13 @@ DON'T clone or fork this repo, unless you want to see how it works first. Code a
 
 # Building the form
 
-[Multer](https://github.com/expressjs/multer) is a middleware that handles `multipart/form-data`. It is most popularly searched for in regards to photo and video file uploads, but could be used for any file type.
+[Multer](https://github.com/expressjs/multer) is a Node.js middleware that handles `multipart/form-data`. It is most popularly searched for in regards to photo and video file uploads, but could be used for any file type.
 
-When used in a form, multer attaches a body object, which contains the values of the inputs from the form, and a file or files object, which contains the uploaded files, to the request object that a server route receives. 
-
-Most multer tutorials will tell you that your HTML form simply needs to be specified as `enctype=multipart/form-data`. However, with a combo of React-Redux-Saga, you need to use FormData() when assigning the file and form inputs to a piece of state to ensure that the data being captured has the correct key:value pairs before being sent on to the server. 
+Multer attaches a body object, which contains the values of the inputs from a form, and a file or files object, which contains the uploaded files, to the request object that a server route receives. Consequently, when creating forms with a file upload option, you must include `encType=multipart/form-data` in your form tag and you must specify that your input is `type='file'`. 
 
 ## Single Upload Form
 
-For a simple, single file upload, you can do what many multer tutorials suggest and use the HTML form and input tags to create a file upload field: 
+For a simple, single file upload, use the HTML form and input tags to create a file upload field: 
 
 ```html
     <form encType='multipart/form-data'>
@@ -46,7 +44,7 @@ To save the file as a piece of state, import the useState hook and instantiate s
 const [newFile, setFile] = useState('')
 ```
 
-For the input, set up an onChange callback function to take the new file and set it to our newFile state variable. Files are a strange data type (if you run typeof File in the browser console, it will say that its a function) and to access them you need to access event.target.files[0]. 
+For the input, set up an onChange callback function to take the new file and set it to our newFile state variable. Files are a strange data type (if you run typeof File in the browser console, it will say that its a function, but if you console.log it, it looks like an object) and to access the singular uploaded file, you must call on event.target.files[0] as though it is an array.  
 
 ```jsx
 <form onSubmit={addNewFile} encType='multipart/form-data'>
@@ -57,5 +55,94 @@ For the input, set up an onChange callback function to take the new file and set
     </input>
     <button type="submit">Submit</button>
 </form>
+```
+
+## Multiple Upload Form
+
+
+# Sending file data
+
+Simply specifying the form and input type may be sufficient with a jQuery or vanilla Javascript front-end. However, with React or a combot of React-Redux-Saga, you need to use FormData() when sending the file and form data to the server to ensure that that data has the correct key:value pairs before being sent on to the server. In these code examples, the formdata creation occurs in the saga function, but it could be done in the React component instead. 
+
+Single file FormData() declaration:
+
+```js
+    //receive file
+    const newFile = action.payload.file;
+    //turn file into formdata by creating
+    //new FormData
+    const data = new FormData();
+    //and appending the file to that FormData
+    data.append("file", newFile);
+```
+
+For multiple files, you must loop through the file array and append each one to the data: 
+
+```js
+    //receive array of files
+    const newFiles = action.payload;
+    //get array length
+    const filesLength = newFiles.files.length;
+    const data = new FormData(); //declare FormData
+    //loop to populate FormData with file data
+    for (let i = 0; i < filesLength; i++) {
+        data.append("file", newFiles.files[i]);
+    }
+```
+
+In the post request, include the following header: 
+
+```js
+yield axios({
+            method: 'POST',
+            url: '/api/image/single',
+            data: data,
+            //include header to inform server of data type
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+            });
+```
+
+# Receiving file data in the server
+
+## Multer
+
+As mentioned early, [multer](https://github.com/expressjs/multer) is middleware that adds a file object to the request object. To set it up, you must import multer: 
+
+```js
+    const multer = require('multer');
+```
+
+And specify a storage location for the files it intercepts. The code example in this repo uses memoryStorage, because we're going to send the files on to an AWS S3 bucket. 
+
+```js
+//configure multer to use computer memory for temp storage
+    const storage = multer.memoryStorage()
+```
+
+I also configured a fileFilter to reject any files that aren't images. This step is optional.
+
+```js
+// configure multer to filter for image files
+const fileFilter = (req, file, cb) =>{
+    if(file.mimetype.split('/')[0] === 'image'){
+        cb(null, true)
+    } else{
+        cb(new multer.MulterError("LIMIT_UNEXPECTED_FILE"), false)
+    }
+}
+```
+
+Finally, instantiate the upload middleware:
+
+```js
+    const upload = multer({storage, fileFilter});
+```
+
+And plug it into your post route, specifying how many files and the fieldname of the file (.single('file')):
+
+```js
+router.post('/single', upload.single('file'), (req, res)
 ```
 
