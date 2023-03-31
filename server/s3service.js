@@ -40,15 +40,15 @@ const command = new PutObjectCommand({
     //declare new s3 client
 //     const s3 = new S3()
 
-    //declare params to upload, in this case, a 
-//     const params = files.map(file => {
-//         return {
+    //declare param to upload
+//     const param = {
+            //declare the bucket to put file in
 //             Bucket: process.env.AWS_BUCKET_NAME,
+            //specify what to call the file (random unique identifier + file name)
 //             Key: `uploads/${uuid()}-${file.originalname}`,
+            //this is the file
 //             Body: file.buffer
 //         };
-//     })
-
-//     return await Promise.all(
-//         params.map((param) => s3.upload(param).promise()));
+        //give param to client to upload and return result
+//     return await s3.upload(param).promise()));
 // }
