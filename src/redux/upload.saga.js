@@ -16,14 +16,13 @@ function* addSingleFile(action) {
         //axios request
         yield axios({
             method: 'POST',
-            url: '/api/upload',
+            url: '/api/image',
             data: data,
             //include header to inform server of data type
             headers: {
                 'content-type': 'multipart/form-data'
             }
             });
-        yield put({type: 'SET_UPLOADS', payload: response.data})
     } catch(error) {
         console.log('Error in addSingleFile', error)
     }
