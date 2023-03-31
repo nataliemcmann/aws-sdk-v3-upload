@@ -95,7 +95,7 @@ In the post request, include the following header:
 ```js
     yield axios({
                 method: 'POST',
-                url: '/api/upload',
+                url: '/api/image/single',
                 data: data,
                 //include header to inform server of data type
                 headers: {
@@ -103,3 +103,46 @@ In the post request, include the following header:
                 }
                 });
 ```
+
+# Receiving file data in the server
+
+## Multer
+
+As mentioned early, [multer](https://github.com/expressjs/multer) is middleware that adds a file object to the request object. To set it up, you must import multer: 
+
+```js
+    const multer = require('multer');
+```
+
+And specify a storage location for the files it intercepts. The code example in this repo uses memoryStorage, because we're going to send the files on to an AWS S3 bucket. 
+
+```js
+//configure multer to use computer memory for temp storage
+    const storage = multer.memoryStorage()
+```
+
+I also configured a fileFilter to reject any files that aren't images. This step is optional.
+
+```js
+// configure multer to filter for image files
+const fileFilter = (req, file, cb) =>{
+    if(file.mimetype.split('/')[0] === 'image'){
+        cb(null, true)
+    } else{
+        cb(new multer.MulterError("LIMIT_UNEXPECTED_FILE"), false)
+    }
+}
+```
+
+Finally, instantiate the upload middleware:
+
+```js
+    const upload = multer({storage, fileFilter});
+```
+
+And plug it into your post route, specifying how many files and the fieldname of the file (.single('file')):
+
+```js
+router.post('/single', upload.single('file'), (req, res)
+```
+
