@@ -12,16 +12,20 @@ const client = new S3({});
 //create and export s3upload, which is an asynchronous function
 //that will execute the PutObjectCommand 
 //when called upon
-export const s3upload = async (files) => {
+export const s3upload = async (file) => {
 const command = new PutObjectCommand({
-    Bucket: "test-bucket",
-    Key: "hello-s3.txt",
-    Body: "Hello S3!",
+    //declare the bucket to put file in
+    Bucket: process.env.AWS_BUCKET_NAME,
+    //specify what to call the file (random unique identifier + file name)
+    Key: `uploads/${uuid()}-${file.originalname}`,
+    //this is the file
+    Body: file.buffer,
     });
 
     try {
-    const response = await client.send(command);
-    console.log(response);
+    const response = await client.send(command).promise();
+    console.log('aws upload success', response);
+    return response;
     } catch (err) {
     console.error(err);
     }
@@ -36,7 +40,7 @@ const command = new PutObjectCommand({
 
 //create and export s3upload, which is an asynchronous function
 //that will execute upload command when called upon
-// exports.s3Upload = async (files) => {
+// exports.s3Upload = async (file) => {
     //declare new s3 client
 //     const s3 = new S3()
 
