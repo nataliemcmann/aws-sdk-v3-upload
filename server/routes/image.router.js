@@ -4,7 +4,6 @@ const pool = require('../modules/pool');
 const router = express.Router(); 
 //import s3
 const { s3upload } = require('../s3service');
-require('dotenv').config(); //need this to get the bucket and keys
 //import multer
 const multer = require('multer');
 //configure multer to use computer memory for temp storage

@@ -2,9 +2,11 @@
 
 //commands and services are modularized, so import both the 
 //desired bucket action and the S3 client
-const { PutObject, S3 } = require("@aws-sdk/client-s3");
+const { PutObjectCommand, S3 } = require("@aws-sdk/client-s3");
 //unique identifier library
 const uuid = require('uuid').v4
+require('dotenv').config(); //need this to get the bucket and keys
+
 
 //the client handles bucket actions
 const client = new S3({});
@@ -13,14 +15,16 @@ const client = new S3({});
 //that will execute the PutObjectCommand 
 //when called upon
 exports.s3upload = async (file) => {
-const command = new PutObject({
-    //declare the bucket to put file in
-    Bucket: process.env.AWS_BUCKET_NAME,
-    //specify what to call the file (random unique identifier + file name)
-    Key: `uploads/${uuid()}-${file.originalname}`,
-    //this is the file
-    Body: file.buffer,
-    });
+    const input = {
+        //declare the bucket to put file in
+        Bucket: process.env.AWS_BUCKET_NAME,
+        //specify what to call the file (random unique identifier + file name)
+        Key: `uploads/${uuid()}-${file.originalname}`,
+        //this is the file
+        Body: file.buffer,
+        }
+
+    const command = new PutObjectCommand(input);
 
     try {
     const response = await client.send(command);
