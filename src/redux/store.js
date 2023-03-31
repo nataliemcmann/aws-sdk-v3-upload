@@ -3,7 +3,7 @@ import createSagaMiddleware from 'redux-saga';
 import logger from 'redux-logger';
 
 import reducer from './upload.reducer'; 
-import saga from './upload.saga'; 
+import uploadSaga from './upload.saga'; 
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -15,6 +15,6 @@ const store = createStore(
 );
 
 // tells the saga middleware to use the saga
-sagaMiddleware.run(saga);
+sagaMiddleware.run(uploadSaga);
 
 export default store;

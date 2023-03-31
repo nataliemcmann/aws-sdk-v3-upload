@@ -5,7 +5,7 @@ import { put, takeEvery } from 'redux-saga/effects';
 function* addSingleFile(action) {
     try{
         //receive file
-        const newFile = action.payload.file;
+        const newFile = action.payload;
         //turn file into formdata by creating
         //new FormData
         const data = new FormData();
@@ -16,7 +16,7 @@ function* addSingleFile(action) {
         //axios request
         yield axios({
             method: 'POST',
-            url: '/api/image',
+            url: '/api/image/single',
             data: data,
             //include header to inform server of data type
             headers: {
@@ -29,7 +29,7 @@ function* addSingleFile(action) {
 }
 
 function* uploadSaga(){
-    takeEvery('ADD_SINGLE_FILE', addSingleFile); 
+    yield takeEvery('ADD_SINGLE_FILE', addSingleFile); 
 }
 
 export default uploadSaga;
