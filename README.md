@@ -146,11 +146,13 @@ And plug it into your post route, specifying how many files and the fieldname of
 router.post('/single', upload.single('file'), (req, res)
 ```
 
-## AWS S3
+# Sending the file to an AWS S3 Bucket
 
 Amazon Simple Storage Service (s3) lets you store files in "buckets" hosted by Amazon Web Services. This type of cloud storage is easier and more secure than building a bunch of your own servers to host a file database. 
 
 To use AWS S3, you need to create an account and set up a bucket. Since this repo is for code, I won't get into how to do bucket set or permissions, but here is the link to their documentation: https://docs.aws.amazon.com/AmazonS3/latest/userguide/GetStartedWithS3.html
+
+## Implementing aws-sdk
 
 The code part is aws-sdk, which allows your server to access your S3. aws-sdk version 2 has several good tutorials and is very beginner-friendly. Alternatively, version 3, which came out in 2020 and is less beginner-friendly. AWS has decent [documentation](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/index.html#aws-sdk-for-javascript-v3) and [code examples](https://docs.aws.amazon.com/AmazonS3/latest/userguide/service_code_examples.html) of aws-sdk version 3, but they are confusing which is why I'm writing out all these steps. Version 3 is more modular than version 2, making it more flexible, but also more intensive to set up. 
 
@@ -168,6 +170,57 @@ const uuid = require('uuid').v4
 require('dotenv').config(); //need this to get the bucket and keys
 ```
 
+Instantiate the client: 
 
+```js
+//the client handles bucket actions
+const client = new S3({});
+```
 
-The actual upload will be an async 
+The actual upload will be an asynchronous function that receives the file, creates input for a PutObject command, then uses the client to send that command. It is important to note that the PutObjectCommand output DOES NOT contain the s3 url for the newly uploaded file, so it must be retrieve by other means. Constructing the url as I did in the example is one way to do it. 
+
+```js
+exports.s3upload = async (file) => {
+    const input = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: `uploads/${uuid()}-${file.originalname}`,
+        Body: file.buffer,
+        }
+
+    const command = new PutObjectCommand(input);
+
+    try {
+    const response = await client.send(command);
+    console.log('aws upload success', response);
+    //putobject does not return file location, but all aws s3 object urls follow a general pattern
+    const url = `https://${input.Bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${input.Key}`
+    return url; //return new file location
+    } catch (err) {
+    console.error(err);
+    }
+};
+```
+
+## Server route
+
+In the router file, import the s3 upload service: 
+
+```js
+const { s3upload } = require('../s3upload');
+```
+
+Because our post route will be using the s3 service, it needs to be an async function, ideally wrapped in a try/catch block, so that it can wait on the s3 client's response before responding to the frontend client. Once we have the s3upload response (which in this case is the s3 object url), we can send it to the client. 
+
+```js
+router.post('/single', upload.single('file'), async (req, res) => {
+    try {
+        const result = await s3upload(req.file)
+        console.log('AWS S3 upload succeeded', result);
+        res.sendStatus(201);
+    } catch (error) {
+        console.log('AWS S3 upload failed');
+        res.sendStatus(500);
+    }
+})
+```
+
