@@ -224,5 +224,5 @@ router.post('/single', upload.single('file'), async (req, res) => {
 })
 ```
 
-And finally, we can render that uploaded image to the DOM using the url we sent back. 
+And finally, we can render that uploaded image to the DOM using the url we sent back. I won't got into that in this ReadMe, but the code example is commented and available in this repo. 
 
