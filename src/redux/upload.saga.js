@@ -14,7 +14,7 @@ function* addSingleFile(action) {
         //check the data object is as you expect
         yield console.log('Post new file to upload', data);
         //axios request
-        yield axios({
+        const response = yield axios({
             method: 'POST',
             url: '/api/image/single',
             data: data,
@@ -23,6 +23,11 @@ function* addSingleFile(action) {
                 'content-type': 'multipart/form-data'
             }
             });
+        //send response data of axios request to the store
+        yield put({
+            type: 'SET_UPLOAD', 
+            payload: response.data
+        })
     } catch(error) {
         console.log('Error in addSingleFile', error)
     }

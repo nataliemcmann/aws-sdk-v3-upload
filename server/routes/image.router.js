@@ -24,7 +24,7 @@ router.post('/single', upload.single('file'), async (req, res) => {
     try{
         const result = await s3upload(req.file)
         console.log('file location received', result);
-        res.sendStatus(201);
+        res.send(result);
     } catch(error) {
         console.log('AWS S3 upload fail');
         res.sendStatus(500);

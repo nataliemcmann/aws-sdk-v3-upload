@@ -1,6 +1,16 @@
-# AWS-SDK V3 PERN Stack Photo Upload Tutorial
+# AWS-SDK V3 React-Node Photo Upload Tutorial
 
 As a junior dev, figuring out how to upload photos to secure cloud storage like Cloudinary or AWS S3 is a typical goal. For myself, scouring the internet for upload tutorials that used my specific stack was a valuable experience but it was difficult. I'm also not entirely sure how I managed to do it. So, for my future self and for any developer who has neither the time nor the patience to cobble together an image upload path for themselves, I'm putting together a collection of code samples showing how to upload files to a React front-end that uses Redux to manage state, Saga to make http requests, and a Node.js/Express.js backend that implements multer and version 3 of aws-sdk for Javascript to handle the data transfer to an AWS S3 Bucket.
+
+The current code examples are for:
+
+- Single image file upload
+
+Future code examples will be: 
+
+- Multiple image file upload
+- video file upload
+- document upload
 
 # Set Up
 
@@ -216,11 +226,13 @@ router.post('/single', upload.single('file'), async (req, res) => {
     try {
         const result = await s3upload(req.file)
         console.log('AWS S3 upload succeeded', result);
-        res.sendStatus(201);
+        res.send(result);
     } catch (error) {
         console.log('AWS S3 upload failed');
         res.sendStatus(500);
     }
 })
 ```
+
+And finally, we can render that uploaded image to the DOM using the url we sent back. I won't got into that in this ReadMe, but the code example is commented and available in this repo. 
 
