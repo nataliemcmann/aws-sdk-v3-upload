@@ -24,7 +24,7 @@ const upload = multer({storage, fileFilter});
 router.post('/single', upload.single('file'), async (req, res) => {
     try{
         const result = await s3upload(req.file)
-        console.log('file location received', result.Location);
+        console.log('file location received', result);
         res.sendStatus(201);
     } catch(error) {
         console.log('AWS S3 upload fail');

@@ -29,7 +29,9 @@ exports.s3upload = async (file) => {
     try {
     const response = await client.send(command);
     console.log('aws upload success', response);
-    return response;
+    //putobject does not return file location, but all aws s3 object urls follow a general pattern
+    const url = `https://${input.Bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${input.Key}`
+    return url; //return new file location
     } catch (err) {
     console.error(err);
     }
@@ -60,3 +62,5 @@ exports.s3upload = async (file) => {
         //give param to client to upload and return result
 //     return await s3.upload(param).promise();
 // }
+
+//**** IN V2, s3.upload returns the file location upon upload */
