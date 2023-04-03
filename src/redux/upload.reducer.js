@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 
+//save single file url as a piece of state
 const uploadedFile = (state = {}, action) => {
     switch (action.type) {
         case 'SET_UPLOAD':

@@ -23,6 +23,7 @@ function* addSingleFile(action) {
                 'content-type': 'multipart/form-data'
             }
             });
+        //send response data of axios request to the store
         yield put({
             type: 'SET_UPLOAD', 
             payload: response.data
