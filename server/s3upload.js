@@ -1,4 +1,5 @@
 //Version 3 upload according to their docs
+//with help from https://stackoverflow.com/questions/67984373/get-uploaded-object-url-with-javascript-aws-sdk-v3
 
 //commands and services are modularized, so import both the 
 //desired bucket action and the S3 client
@@ -63,4 +64,4 @@ exports.s3upload = async (file) => {
 //     return await s3.upload(param).promise();
 // }
 
-//**** IN V2, s3.upload returns the file location upon upload */
+//** IN V2, s3.upload returns the file location automatically **/

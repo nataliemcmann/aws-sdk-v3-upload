@@ -19,8 +19,8 @@ Use this repo as a reference and/or code along on a starter repo that has the fo
 - [Node.js](https://nodejs.org/en)
 - [Express.js](https://expressjs.com/) 
 - [pg](https://node-postgres.com/) 
-- [PostgreSQL](https://www.postgresql.org/) 
-- *Optional [Postico](https://eggerapps.at/postico2/) as a PostgreSQL interface.   
+- [Multer](https://github.com/expressjs/multer) 
+- [aws-sdk](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/index.html#aws-sdk-for-javascript-v3) 
 
 # Building the form
 
@@ -152,6 +152,22 @@ Amazon Simple Storage Service (s3) lets you store files in "buckets" hosted by A
 
 To use AWS S3, you need to create an account and set up a bucket. Since this repo is for code, I won't get into how to do bucket set or permissions, but here is the link to their documentation: https://docs.aws.amazon.com/AmazonS3/latest/userguide/GetStartedWithS3.html
 
-The code part is aws-sdk, which allows your server to access your S3. aws-sdk version 2 has several good tutorials and is very beginner-friendly. Alternatively, version 3, which came out in 2020 and is less beginner-friendly. AWS has decent [documentation](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/index.html#aws-sdk-for-javascript-v3) and [code examples](https://docs.aws.amazon.com/AmazonS3/latest/userguide/service_code_examples.html) of aws-sdk version 3, but they are confusing which is why I'm writing out all these steps. Version 3 is more modular than version 2 and requires some extra steps to set it up.  
+The code part is aws-sdk, which allows your server to access your S3. aws-sdk version 2 has several good tutorials and is very beginner-friendly. Alternatively, version 3, which came out in 2020 and is less beginner-friendly. AWS has decent [documentation](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/index.html#aws-sdk-for-javascript-v3) and [code examples](https://docs.aws.amazon.com/AmazonS3/latest/userguide/service_code_examples.html) of aws-sdk version 3, but they are confusing which is why I'm writing out all these steps. Version 3 is more modular than version 2, making it more flexible, but also more intensive to set up. 
 
-In this repo, I have the version 2 code commented out beneath the version 3 code in the s3upload.js for comparison. The biggest difference between v2 and v3 is that in v3, the PutObjectCommand or upload DOES NOT return the location of the file in the s3 bucket. To retrieve the file location, 
+In this repo, I have the version 2 code commented out beneath the version 3 code in the s3upload.js for comparison. The biggest difference between v2 and v3 is that in v3, the PutObjectCommand or upload DOES NOT return the location of the file in the s3 bucket. According to the internet, there are MANY ways to get a url for an uploaded object but I struggled to get three of them to work. The easiest (but likely least secure) way to get the url is to construct it from the bucket, region, and file key within the upload function.
+
+To start, create a file to house the s3 service (mine lives in s3upload.js), and install @aws-sdk/client-s3 and uuid version 4 (the uuid is optional, simply adds a unique identifier to distinguish between files that may be named the same). 
+
+Import the following: 
+
+```js
+//desired bucket action and the S3 client
+const { PutObjectCommand, S3 } = require("@aws-sdk/client-s3");
+//unique identifier library
+const uuid = require('uuid').v4
+require('dotenv').config(); //need this to get the bucket and keys
+```
+
+
+
+The actual upload will be an async 
