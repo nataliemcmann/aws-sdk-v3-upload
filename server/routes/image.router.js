@@ -3,7 +3,7 @@ const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router(); 
 //import s3
-const { s3upload } = require('../s3service');
+const { s3upload } = require('../s3upload');
 //import multer
 const multer = require('multer');
 //configure multer to use computer memory for temp storage
